@@ -17,13 +17,52 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView?.backgroundColor = .white
+        //Colocar a ViewController a escuta para quando o post for concluido esta executar o refresh do feed
+        NotificationCenter.default.addObserver(self, selector: #selector(handleUpdateFeed), name: SharePhotoController.updateFeedNotificationName, object: nil)
         
+        collectionView?.backgroundColor = .white
         collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
     
-        setupNavigationItems()
+        let refreshControll = UIRefreshControl()
+        refreshControll.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
+        collectionView?.refreshControl = refreshControll
         
+        setupNavigationItems()
+        fetchAllPosts()
+    }
+    
+    @objc func handleUpdateFeed() {
+        handleRefresh()
+    }
+    
+    @objc func handleRefresh() {
+        //Necessario remover todos os posts de forma a que quando se unfollow um user os posts deste deixem de aparecer no feed
+        posts.removeAll()
+        fetchAllPosts()
+    }
+    
+    fileprivate func fetchAllPosts() {
         fetchPosts()
+        fetchFollowingUserIds()
+    }
+    
+    fileprivate func fetchFollowingUserIds() {
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        Database.database().reference().child("following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+            
+            
+            guard let userIdsDictionary = snapshot.value as? [String: Any] else {return}
+            
+            userIdsDictionary.forEach({ (key, value) in
+                Database.fetchUserWithUID(uid: key, completion: { (user) in
+                    self.fetchPostsWithUser(user: user)
+                })
+            })
+            
+        }) { (err) in
+            print("Failed fetching following users uids: ", err)
+        }
     }
     
     //A razao para aqui se estar a usar o observerSingleEvent com .Value em vez do .ChildAdded como no UserProfileController
@@ -44,6 +83,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             
+            //Terminar a animacao do UIRefreshControll
+            self.collectionView?.refreshControl?.endRefreshing()
+            
             guard let dictionaries = snapshot.value as? [String: Any] else {return}
             
             dictionaries.forEach({ (key, value) in
@@ -59,6 +101,9 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 self.posts.append(post)
                 
             })
+            self.posts.sort(by: {$0.creationDate.compare($1.creationDate) == .orderedDescending})
+//            self.posts.sort(by: {$0.creationDate > $1.creationDate})
+            
             self.collectionView?.reloadData()
             
             

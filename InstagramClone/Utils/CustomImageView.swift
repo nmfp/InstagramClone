@@ -16,6 +16,9 @@ class CustomImageView: UIImageView {
     
     func loadImage(urlString: String) {
         
+        //O facto de no inicio se afectar a nil faz com que deixe de existir o efeito fliquering dando uma melhor UX
+        self.image = nil
+        
         lastURLUsedToLoadImage = urlString
         
         if let cachedImage = imageCache[urlString] {

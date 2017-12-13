@@ -31,6 +31,8 @@ class SharePhotoController: UIViewController {
         return tv
     }()
     
+    static let updateFeedNotificationName = NSNotification.Name(rawValue: "UpdateFeed");
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -99,6 +101,9 @@ class SharePhotoController: UIViewController {
             }
             print("Successfully saved post to DB")
             self.dismiss(animated: true, completion: nil)
+            
+            //Criar uma notificacao que vai avisar toda a app que o novo post ja foi criado e concluido para a aplicacao fazer o refresh automatico no homeController
+            NotificationCenter.default.post(name: SharePhotoController.updateFeedNotificationName, object: nil)
         }
     }
     
