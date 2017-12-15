@@ -17,6 +17,10 @@
 		1F4617E01FD41A53000C3FBC /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4617DF1FD41A53000C3FBC /* MainTabBarController.swift */; };
 		1F4617E21FD41B5A000C3FBC /* UserProfileController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4617E11FD41B5A000C3FBC /* UserProfileController.swift */; };
 		1F4617E51FD43535000C3FBC /* UserProfileHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1F4617E41FD43535000C3FBC /* UserProfileHeader.swift */; };
+		1FB9417B1FE1948B0064B3D7 /* CameraController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB9417A1FE1948A0064B3D7 /* CameraController.swift */; };
+		1FB9417D1FE301760064B3D7 /* PreviewPhotoContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB9417C1FE301760064B3D7 /* PreviewPhotoContainerView.swift */; };
+		1FB9417F1FE348FC0064B3D7 /* CustomAnimationPresentor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB9417E1FE348FC0064B3D7 /* CustomAnimationPresentor.swift */; };
+		1FB941811FE350FB0064B3D7 /* CustomAnimationDismisser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB941801FE350FB0064B3D7 /* CustomAnimationDismisser.swift */; };
 		1FE3BEE81FD61DA700D60353 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE3BEE71FD61DA700D60353 /* LoginController.swift */; };
 		1FE3BEEB1FD76F2F00D60353 /* PhotoSelectorController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE3BEEA1FD76F2F00D60353 /* PhotoSelectorController.swift */; };
 		1FE3BEED1FD842FD00D60353 /* PhotoSelectorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FE3BEEC1FD842FD00D60353 /* PhotoSelectorCell.swift */; };
@@ -47,6 +51,10 @@
 		1F4617DF1FD41A53000C3FBC /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		1F4617E11FD41B5A000C3FBC /* UserProfileController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileController.swift; sourceTree = "<group>"; };
 		1F4617E41FD43535000C3FBC /* UserProfileHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileHeader.swift; sourceTree = "<group>"; };
+		1FB9417A1FE1948A0064B3D7 /* CameraController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraController.swift; sourceTree = "<group>"; };
+		1FB9417C1FE301760064B3D7 /* PreviewPhotoContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewPhotoContainerView.swift; sourceTree = "<group>"; };
+		1FB9417E1FE348FC0064B3D7 /* CustomAnimationPresentor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationPresentor.swift; sourceTree = "<group>"; };
+		1FB941801FE350FB0064B3D7 /* CustomAnimationDismisser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAnimationDismisser.swift; sourceTree = "<group>"; };
 		1FE3BEE71FD61DA700D60353 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		1FE3BEEA1FD76F2F00D60353 /* PhotoSelectorController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorController.swift; sourceTree = "<group>"; };
 		1FE3BEEC1FD842FD00D60353 /* PhotoSelectorCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoSelectorCell.swift; sourceTree = "<group>"; };
@@ -99,6 +107,7 @@
 		1F4617C71FD2DAAA000C3FBC /* InstagramClone */ = {
 			isa = PBXGroup;
 			children = (
+				1FB941791FE194770064B3D7 /* Camera */,
 				1FE3BF021FDD710C00D60353 /* Search */,
 				1FE3BEF91FDBFD6200D60353 /* Home */,
 				1FE3BEF21FDB40BA00D60353 /* Models */,
@@ -135,6 +144,17 @@
 				1FE3BEF51FDB42AA00D60353 /* UserProfilePhotoCell.swift */,
 			);
 			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		1FB941791FE194770064B3D7 /* Camera */ = {
+			isa = PBXGroup;
+			children = (
+				1FB9417A1FE1948A0064B3D7 /* CameraController.swift */,
+				1FB9417C1FE301760064B3D7 /* PreviewPhotoContainerView.swift */,
+				1FB9417E1FE348FC0064B3D7 /* CustomAnimationPresentor.swift */,
+				1FB941801FE350FB0064B3D7 /* CustomAnimationDismisser.swift */,
+			);
+			path = Camera;
 			sourceTree = "<group>";
 		};
 		1FE3BEE61FD61D9100D60353 /* Login */ = {
@@ -346,12 +366,16 @@
 				1FE3BEF41FDB40CB00D60353 /* Post.swift in Sources */,
 				1FE3BF041FDD711F00D60353 /* UserSearchController.swift in Sources */,
 				1F4617DC1FD2F3C9000C3FBC /* Extensions.swift in Sources */,
+				1FB9417F1FE348FC0064B3D7 /* CustomAnimationPresentor.swift in Sources */,
+				1FB9417B1FE1948B0064B3D7 /* CameraController.swift in Sources */,
 				1FE3BEF61FDB42AA00D60353 /* UserProfilePhotoCell.swift in Sources */,
 				1FE3BEFF1FDCC39600D60353 /* User.swift in Sources */,
 				1F4617E01FD41A53000C3FBC /* MainTabBarController.swift in Sources */,
 				1F4617E51FD43535000C3FBC /* UserProfileHeader.swift in Sources */,
+				1FB941811FE350FB0064B3D7 /* CustomAnimationDismisser.swift in Sources */,
 				1F4617E21FD41B5A000C3FBC /* UserProfileController.swift in Sources */,
 				1F4617C91FD2DAAA000C3FBC /* AppDelegate.swift in Sources */,
+				1FB9417D1FE301760064B3D7 /* PreviewPhotoContainerView.swift in Sources */,
 				1FE3BEE81FD61DA700D60353 /* LoginController.swift in Sources */,
 				1FE3BEFD1FDC024C00D60353 /* HomePostCell.swift in Sources */,
 				1FE3BEEF1FD8495100D60353 /* PhotoSelectorHeader.swift in Sources */,
