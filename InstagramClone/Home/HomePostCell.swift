@@ -8,7 +8,13 @@
 
 import UIKit
 
+protocol HomePostCellDelegate {
+    func didTapComment(post: Post)
+}
+
 class HomePostCell: UICollectionViewCell {
+    
+    var delegate: HomePostCellDelegate?
     
     var post: Post? {
         didSet {
@@ -53,9 +59,10 @@ class HomePostCell: UICollectionViewCell {
         return button
     }()
     
-    let commentButton: UIButton = {
+    lazy var commentButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "comment").withRenderingMode(.alwaysOriginal), for: .normal)
+        button.addTarget(self, action: #selector(handleComment), for: .touchUpInside)
         return button
     }()
     
@@ -84,6 +91,12 @@ class HomePostCell: UICollectionViewCell {
         iv.clipsToBounds = true
         return iv
     }()
+    
+    @objc func handleComment() {
+        print("Tapping comment...")
+        guard let post = post else {return}
+        delegate?.didTapComment(post: post)
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

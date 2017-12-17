@@ -12,8 +12,7 @@ class CustomAnimationDismisser: NSObject, UIViewControllerAnimatedTransitioning 
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
         return 0.5
     }
-    
-    
+     
     //parametro transitionContext permite manipular a animacao
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         //my custom transition animation code logic
@@ -40,7 +39,5 @@ class CustomAnimationDismisser: NSObject, UIViewControllerAnimatedTransitioning 
             //Necessario chamar este metodo para notificar o sistema que a animacao terminou
             transitionContext.completeTransition(true)
         }
-        
-        
     }
 }

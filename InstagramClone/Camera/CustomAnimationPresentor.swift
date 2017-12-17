@@ -13,7 +13,6 @@ class CustomAnimationPresentor: NSObject, UIViewControllerAnimatedTransitioning 
         return 0.5
     }
     
-    
     //parametro transitionContext permite manipular a animacao
     func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         //my custom transition animation code logic
@@ -27,15 +26,18 @@ class CustomAnimationPresentor: NSObject, UIViewControllerAnimatedTransitioning 
         
         //adicionar a toView a containerView para ser visualizada durante a animacao
         containerView.addSubview(toView)
-        
+        //definição da frame inicial que neste caso vai ser a camera que vai estar como se fosse ao lado da homeController por isso se define que a cordenada xx começa
+        //na posição negativa da largura do ecra para a animação comecar mesmo na lateral esquerda da homeController
         let startingFrame = CGRect(x: -toView.frame.width, y: 0, width: toView.frame.width, height: toView.frame.height)
         
         toView.frame = startingFrame
         
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             //animation
+            //Posicao final
             //Esta animacao ira determinar o ponto final da tela onde ira ficar a toView
             toView.frame = CGRect(x: 0, y: 0, width: toView.frame.width, height: toView.frame.height)
+            //Posicao final
             //Esta animacao ira fazer com que a view de origem deslize ao longo do ecra em conjunto com a toView
             fromView.frame = CGRect(x: fromView.frame.width, y: 0, width: fromView.frame.width, height: fromView.frame.height)
         }) { (_) in
@@ -44,7 +46,5 @@ class CustomAnimationPresentor: NSObject, UIViewControllerAnimatedTransitioning 
             //Necessario chamar este metodo para notificar o sistema que a animacao terminou
             transitionContext.completeTransition(true)
         }
-        
-        
     }
 }

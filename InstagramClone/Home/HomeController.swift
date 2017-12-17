@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLayout, HomePostCellDelegate {
     
     let cellId = "cellId"
     var posts = [Post]()
@@ -48,6 +48,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     fileprivate func fetchFollowingUserIds() {
         guard let uid = Auth.auth().currentUser?.uid else {return}
+        
         
         Database.database().reference().child("following").child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
             
@@ -97,7 +98,10 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 
                 //                print("ImageUrl: ", imageUrl)
                 
-                let post = Post(user: user, dictionary: dictionary)
+                var post = Post(user: user, dictionary: dictionary)
+                
+                //Vai-se guardar o ip do post na variavel id criada para se ter acesso a este no commentsController
+                post.id = key
                 self.posts.append(post)
                 
             })
@@ -135,6 +139,8 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         cell.post = posts[indexPath.item]
         
+        cell.delegate = self
+        
         return cell
     }
     
@@ -148,5 +154,13 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         return CGSize(width: view.frame.width, height: height)
     }
     
-    
+    func didTapComment(post: Post) {
+        print("HomeController handling comments...")
+        
+        print(post)
+        
+        let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
+        commentsController.post = post 
+        navigationController?.pushViewController(commentsController, animated: true)
+    }
 }
