@@ -9,7 +9,14 @@
 import UIKit
 import Firebase
 
+protocol UserProfileHeaderDelegate {
+    func didChangeToListView()
+    func didChangeToGridView()
+}
+
 class UserProfileHeader: UICollectionViewCell {
+    
+    var delegate: UserProfileHeaderDelegate?
     
     var user: User? {
         didSet {
@@ -26,17 +33,19 @@ class UserProfileHeader: UICollectionViewCell {
         return iv
     }()
     
-    let gridButton: UIButton = {
+    lazy var gridButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "grid"), for: .normal)
-//        button.tintColor = UIColor(white: 0, alpha: 0.1)
+        button.tintColor = .mainBlue()
+        button.addTarget(self, action: #selector(handleChangeToGridView), for: .touchUpInside)
         return button
     }()
     
-    let listButton: UIButton = {
+    lazy var listButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(#imageLiteral(resourceName: "list"), for: .normal)
         button.tintColor = UIColor(white: 0, alpha: 0.2)
+        button.addTarget(self, action: #selector(handleChangeToListView), for: .touchUpInside)
         return button
     }()
     
@@ -100,6 +109,20 @@ class UserProfileHeader: UICollectionViewCell {
         button.addTarget(self, action: #selector(handleEditProfileOrFollow), for: .touchUpInside)
         return button
     }()
+
+    @objc func handleChangeToGridView() {
+        print("handle change to gridview")
+        gridButton.tintColor = .mainBlue()
+        listButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        delegate?.didChangeToGridView()
+    }
+    
+    @objc func handleChangeToListView() {
+        print("handle change to listview")
+        listButton.tintColor = .mainBlue()
+        gridButton.tintColor = UIColor(white: 0, alpha: 0.2)
+        delegate?.didChangeToListView()
+    }
     
     @objc func handleEditProfileOrFollow() {
         guard let currentUserLoggedIn = Auth.auth().currentUser?.uid else {return}

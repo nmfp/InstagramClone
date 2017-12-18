@@ -17,6 +17,8 @@ struct Post {
     var caption: String
     var creationDate: Date
     
+    var hasLiked: Bool = false
+    
     init(user: User, dictionary: [String: Any]) {
         self.user = user
         self.imageUrl = dictionary["imageUrl"] as? String ?? ""

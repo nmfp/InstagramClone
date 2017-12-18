@@ -22,7 +22,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         
         collectionView?.backgroundColor = .white
         collectionView?.register(HomePostCell.self, forCellWithReuseIdentifier: cellId)
-    
+        
         let refreshControll = UIRefreshControl()
         refreshControll.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         collectionView?.refreshControl = refreshControll
@@ -78,7 +78,7 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     fileprivate func fetchPostsWithUser(user: User) {
-//        guard let uid = Auth.auth().currentUser?.uid else {return}
+        //        guard let uid = Auth.auth().currentUser?.uid else {return}
         
         let ref = Database.database().reference().child("posts").child(user.uid)
         
@@ -102,13 +102,31 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 
                 //Vai-se guardar o ip do post na variavel id criada para se ter acesso a este no commentsController
                 post.id = key
-                self.posts.append(post)
+                
+                guard let uid = Auth.auth().currentUser?.uid else {return}
+                
+                Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
+                    print(snapshot.value)
+                    
+                    if let value = snapshot.value as? Int, value == 1 {
+                        post.hasLiked = true
+                    }
+                    else {
+                        post.hasLiked = false
+                    }
+                    
+                    
+                    self.posts.append(post)
+                    self.posts.sort(by: {$0.creationDate.compare($1.creationDate) == .orderedDescending})
+                    //            self.posts.sort(by: {$0.creationDate > $1.creationDate})
+                    
+                    self.collectionView?.reloadData()
+                }, withCancel: { (err) in
+                    print("Failed do fetch like info for post ", err)
+                })
                 
             })
-            self.posts.sort(by: {$0.creationDate.compare($1.creationDate) == .orderedDescending})
-//            self.posts.sort(by: {$0.creationDate > $1.creationDate})
             
-            self.collectionView?.reloadData()
             
             
         }) { (err) in
@@ -162,5 +180,33 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
         let commentsController = CommentsController(collectionViewLayout: UICollectionViewFlowLayout())
         commentsController.post = post 
         navigationController?.pushViewController(commentsController, animated: true)
+    }
+    
+    func didLike(for cell: HomePostCell) {
+        print("handling like inside controller")
+        
+        guard let indexPath = collectionView?.indexPath(for: cell) else {return}
+        var post = posts[indexPath.item]
+        
+        guard let postId = post.id else {return}
+        guard let uid = Auth.auth().currentUser?.uid else {return}
+        
+        let values = [uid: post.hasLiked == true ? 0 : 1]
+        
+        Database.database().reference().child("likes").child(postId).updateChildValues(values) { (err, ref) in
+            if let err = err {
+                print("Error saving likes: ", err)
+                return
+            }
+            
+            print("Sucessfully liked post")
+            
+            post.hasLiked = !post.hasLiked
+            //Por vezes quando se retira um objecto de um array ele ganha outra referencia, ou seja, como se fosse por copia e
+            //todas as alteracoes feitas nesse objecto recebido nao se refletem no mesmo no array, dai se afectar a posicao do
+            //array novamente com o objecto modificado
+            self.posts[indexPath.item] = post
+            self.collectionView?.reloadItems(at: [indexPath])
+        }
     }
 }
