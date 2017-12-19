@@ -8,9 +8,10 @@
 
 import UIKit
 import Firebase
+import UserNotifications
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUserNotificationCenterDelegate {
 
     var window: UIWindow?
 
@@ -22,9 +23,53 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow()
         window?.rootViewController = MainTabBarController()
         
+        attemptRegisterForNotifications(application: application)
         
         return true
     }
+    
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        print("Registered for notifications: ", deviceToken)
+    }
+    
+    //Listen for user notifications
+    //Ao implementar as push notifications com o FCM se a aplicacao estiver aberta quando enviada uma notificacao de teste, esta so aparece quando a app esta em background
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(.alert)
+    }
+    
+    func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String) {
+        print("Registred with FCM with token: ", fcmToken)
+    }
+    
+    private func attemptRegisterForNotifications(application: UIApplication) {
+        print("Attempting to register APNS...")
+        
+        Messaging.messaging().delegate = self
+        
+        UNUserNotificationCenter.current().delegate = self
+        
+        //user notifications auth
+        let options: UNAuthorizationOptions = [.alert, .sound, .badge]
+        UNUserNotificationCenter.current().requestAuthorization(options: options) { (granted, err) in
+            if let err = err {
+                print("Failed to request auth: ", err)
+                return
+            }
+            
+            if granted {
+                print("Auth granted")
+            }
+            else {
+                print("Auth denied ")
+            }
+        }
+        
+        
+        application.registerForRemoteNotifications()
+    }
+    
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

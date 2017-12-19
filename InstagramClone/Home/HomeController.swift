@@ -106,7 +106,6 @@ class HomeController: UICollectionViewController, UICollectionViewDelegateFlowLa
                 guard let uid = Auth.auth().currentUser?.uid else {return}
                 
                 Database.database().reference().child("likes").child(key).child(uid).observeSingleEvent(of: .value, with: { (snapshot) in
-                    print(snapshot.value)
                     
                     if let value = snapshot.value as? Int, value == 1 {
                         post.hasLiked = true
