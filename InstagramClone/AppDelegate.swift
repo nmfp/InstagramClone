@@ -70,6 +70,39 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
     }
     
     
+    //Este metodo e chamado sempre que o utilizador carrega numa notificacao
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        
+        let userInfo = response.notification.request.content.userInfo
+        
+        if let followerId = userInfo["followerId"] as? String {
+            print(followerId)
+            
+            //Mostrar o userProfileController do follower
+            let userProfileController = UserProfileController(collectionViewLayout: UICollectionViewFlowLayout())
+            userProfileController.userId = followerId
+            
+            //Como aceder ao main UI na AppDelegate
+            if let mainTabBarController = window?.rootViewController as? MainTabBarController {
+                
+                //Uma vez que abaixo se esta a fazer o cast para a homeController e necessario alterar o index da tabBar para 0 evitando assim ter que validar
+                //todas as ViewController da tabBar
+                mainTabBarController.selectedIndex = 0
+                
+                //Como o user pode estar na altura da notificacao a postar uma fotografia, essa ViewController das fotografias foi ja anteriormente colocada na
+                //stack da NavigationController, ou seja, a alteracao para o userProfileController e feita mas o user so se apercebe depois da ViewController das
+                //fotografias desaparece.
+                //Para isto nao acontecer, faz-se dismiss das ViewControllers presentes actualmente e assim o user tem sempre a precepcao do aparecimento
+                //do userProfileController
+                mainTabBarController.presentedViewController?.dismiss(animated: true, completion: nil)
+                
+                if let homeNavigationController = mainTabBarController.viewControllers?.first as? UINavigationController {
+                    homeNavigationController.pushViewController(userProfileController, animated: true)
+                }
+            }
+        }
+    }
+    
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

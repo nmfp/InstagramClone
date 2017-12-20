@@ -133,7 +133,10 @@ class SignUpController: UIViewController, UIImagePickerControllerDelegate, UINav
                 //unwrap do id do user criado para guardar na db
                 guard let uid = user?.uid else {return}
                 
-                let dictionaryValues = ["username" : username, "profileImageUrl" : profileImageUrl]
+                //guardar o fcmToken de cada dispositivo como campo para a basedados para depois se poder ter acesso para enviar notificacoes
+                guard let fcmToken = Messaging.messaging().fcmToken else {return}
+                
+                let dictionaryValues = ["username" : username, "profileImageUrl" : profileImageUrl, "fcmToken": fcmToken ]
                 let values = [uid : dictionaryValues]
                 
                 //Agora e necessario guardar o user na base de dados
