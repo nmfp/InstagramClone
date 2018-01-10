@@ -73,6 +73,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, UNUser
     //Este metodo e chamado sempre que o utilizador carrega numa notificacao
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
+        //Objecto da notificacao onde consta a informacao passada no objecto criado do lado do Firebase Cloud Functions
         let userInfo = response.notification.request.content.userInfo
         
         if let followerId = userInfo["followerId"] as? String {
